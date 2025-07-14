@@ -42,7 +42,7 @@ public class ReviewController {
                 HttpStatus.OK);
     }
 
-    @PutMapping("/reviews/{reviewId")
+    @PutMapping("/reviews/{reviewId}")
     public ResponseEntity<String> updateReview(@PathVariable Long companyId,
                                                @PathVariable Long reviewId,
                                                @RequestBody Review review)
@@ -56,6 +56,20 @@ public class ReviewController {
             return new ResponseEntity<>("Review not updated",
                     HttpStatus.NOT_FOUND);
 
+    }
+
+    @DeleteMapping("/reviews/{reviewId}")
+    public ResponseEntity<String> deleteReview(@PathVariable Long companyId,
+                                               @PathVariable Long reviewId)
+    {
+        boolean isReviewDeleted = reviewService.deleteReview(companyId, reviewId);
+        if(isReviewDeleted)
+            return new ResponseEntity<>("Review deleted successfully",
+                    HttpStatus.OK);
+
+        else
+            return new ResponseEntity<>("Review not deleted",
+                    HttpStatus.NOT_FOUND);
     }
 
 
