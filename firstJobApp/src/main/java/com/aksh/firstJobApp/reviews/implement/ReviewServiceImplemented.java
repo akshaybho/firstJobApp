@@ -27,13 +27,40 @@ public class ReviewServiceImplemented implements ReviewService {
     }
 
     @Override
-    public void saveReviews(Long companyId, Review review) {
+    public boolean saveReviews(Long companyId, Review review) {
 
         Company company = companyService.getCompanyById(companyId);
         if(company!=null)
         {
             review.setCompany(company);
              reviewRepo.save(review);
+        }
+        return false;
+    }
+
+    @Override
+    public Review getReview(Long companyId, Long reviewId) {
+
+        List <Review> reviews = reviewRepo.findByCompanyId(companyId);
+        return reviews.stream()
+                .filter(n->n.getId().equals(reviewId))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public boolean updateReview(Long companyId, Long reviewId, Review updatedReview) {
+
+        if(companyService.getCompanyById(companyId)!=null)
+        {
+            updatedReview.setCompany(companyService.getCompanyById(companyId));
+            updatedReview.setId(reviewId);
+            reviewRepo.save(updatedReview);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
